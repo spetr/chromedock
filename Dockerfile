@@ -13,7 +13,7 @@ RUN export TZ=ETC/UTC && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
 	apt-get update && \
-	apt-get -y install --no-install-recommends wget locales procps && \
+	apt-get -y install --no-install-recommends wget locales procps gnupg && \
 	touch /etc/locale.gen && \
 	echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
 	locale-gen && \
@@ -71,8 +71,10 @@ ENV UID=99
 ENV GID=100
 ENV DATA_PERM=770
 ENV USER="chrome"
+COPY google-chrome.list /etc/apt/sources.list.d/google-chrome.list
+RUN wget -O- https://dl.google.com/linux/linux_signing_key.pub |gpg --dearmor > /etc/apt/trusted.gpg.d/google.gpg
 RUN apt-get update && \
-	apt-get -y install --no-install-recommends chromium fonts-takao fonts-arphic-uming && \
+	apt-get -y install --no-install-recommends google-chrome-stable && \
 	rm -rf /var/lib/apt/lists/* && \
 	sed -i '/    document.title =/c\    document.title = "Chromium - noVNC";' /usr/share/novnc/app/ui.js && \
 	rm /usr/share/novnc/app/images/icons/*
