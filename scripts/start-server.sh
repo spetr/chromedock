@@ -46,6 +46,9 @@ cd ${DATA_DIR}
 /usr/bin/google-chrome \
 	--window-position=0,0 \
 	--window-size=${CUSTOM_RES_W},${CUSTOM_RES_H} \
+	--ui-show-fps-counter \
+	--frame-throttle-fps=15 \
+	--max-gum-fps=15 \
 	--user-data-dir=/tmp \
 	--disk-cache-dir=/tmp \
 	--disk-cache-size=4096 \
@@ -62,12 +65,18 @@ cd ${DATA_DIR}
 	--disable-background-networking \
 	--disable-client-side-phishing-detection \
 	--disable-default-apps \
-    --disable-dev-shm-usage \
-    --disable-hang-monitor \
-    --disable-infobars \
-    --disable-popup-blocking \
-    --disable-prompt-on-repost \
-    --disable-sync \
+	--disable-dev-shm-usage \
+	--disable-hang-monitor \
+	--disable-infobars \
+	--disable-popup-blocking \
+	--disable-prompt-on-repost \
+	--disable-sync \
+	--disable-canvas-aa \
+	--disable-composited-antialiasing \
+	--disable-font-subpixel-positioning \
+	--disable-smooth-scrolling \
+	--disable-speech-api \
+	--disable-crash-reporter \
 	--ignore-certificate-errors \
 	--test-type \
 	--load-extension=/opt/iwc-rec-ext/ \

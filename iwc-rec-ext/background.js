@@ -49,7 +49,7 @@ function startScreenRecording(tabId) {
                     minHeight: 9,
                     maxWidth: 1920,
                     maxHeight: 1080,
-                    maxFrameRate: 24
+                    maxFrameRate: 15
                 }
             }
         };
