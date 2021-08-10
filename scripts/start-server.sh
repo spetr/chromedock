@@ -44,15 +44,19 @@ sleep 2
 echo "---Starting Chrome---"
 cd ${DATA_DIR}
 /usr/bin/google-chrome \
-	--user-data-dir=/tmp \
-	--disable-accelerated-video \
-	--disable-gpu \
+	--window-position=0,0 \
 	--window-size=${CUSTOM_RES_W},${CUSTOM_RES_H} \
+	--user-data-dir=/tmp \
+	--disk-cache-dir=/tmp \
+	--disk-cache-size=4096 \
+	--media-cache-size=4096 \
+	--alsa-input-device=null \
+	--alsa-output-device=null \
+	--audio-output-channels=1 \
+	--block-new-web-contents \
 	--no-sandbox \
 	--no-first-run \
 	--no-pings \
-	--single-process \
-	--alsa-output-device=null \
 	--auto-ssl-client-auth \
 	--autoplay-policy=no-user-gesture-required \
 	--disable-background-networking \
@@ -69,5 +73,5 @@ cd ${DATA_DIR}
 	--load-extension=/opt/iwc-rec-ext/ \
 	--whitelisted-extension-id=ifiomgafmdlhpckihjeimadkcalnamfe \
 	--dbus-stub \
-	--enable-logging --v=1 \
+	--enable-logging=stderr \
 	${EXTRA_PARAMETERS}
