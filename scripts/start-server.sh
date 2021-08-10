@@ -46,7 +46,7 @@ cd ${DATA_DIR}
 /usr/bin/google-chrome \
 	--window-position=0,0 \
 	--window-size=${CUSTOM_RES_W},${CUSTOM_RES_H} \
-	--ui-show-fps-counter \
+	--show-fps-counter \
 	--frame-throttle-fps=15 \
 	--max-gum-fps=15 \
 	--user-data-dir=/tmp \
