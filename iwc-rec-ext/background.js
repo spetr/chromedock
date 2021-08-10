@@ -62,6 +62,11 @@ function startScreenRecording(tabId) {
             }
             console.log('Recieved tabCapture stream:', stream)
 
+            var recStream = new MediaStream();
+            stream.getTracks().forEach((track) => {
+                recStream.addTrack(track);
+            });
+
             var options = {
                 type: 'video',
                 disableLogs: false,
@@ -84,7 +89,7 @@ function startScreenRecording(tabId) {
                     return;
             }
 
-            var mediaRecorder = new MediaRecorder(stream, options);
+            var mediaRecorder = new MediaRecorder(recStream, options);
             var seqID = 0;
             mediaRecorder.ondataavailable = (event) => {
                 if (event.data.size > 0) {
@@ -102,13 +107,13 @@ function startScreenRecording(tabId) {
                     xhr.setRequestHeader('X-SeqID', seqID);
                     xhr.send(event.data);
                     xhr.onreadystatechange = () => {
-                        if (this.readyState === XMLHttpRequest.DONE) {
-                            if (this.status === 200) {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
                                 console.log(`Succesfuly send chunk ${seqID} to API.`);
                                 return
                             }
                             console.log(`Error while sending chunk ${seqID} to API.`);
-                            console.log(this);
+                            console.log(xhr);
                         }
                     }
                 }
