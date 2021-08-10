@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM --platform=amd64 debian:buster-slim
 
 LABEL maintainer="petr@digitaldata.cz"
 
