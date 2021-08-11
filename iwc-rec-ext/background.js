@@ -55,22 +55,16 @@ function startScreenRecording(tabId) {
         };
         chrome.tabCapture.capture(constraints, (stream) => {
             if (chrome.runtime.lastError) {
-                console.log('Error while capturing tab.');
-                console.log(chrome.runtime.lastError.message);
+                console.log('Error while capturing tab: ' + chrome.runtime.lastError.message);
                 console.log('Please run chrome with: --whitelisted-extension-id=' + chrome.runtime.id);
                 return;
             }
             console.log('Recieved tabCapture stream:', stream)
 
-            var recStream = new MediaStream();
-            stream.getTracks().forEach((track) => {
-                recStream.addTrack(track);
-            });
-
             var options = {
                 type: 'video',
-                disableLogs: false,
-                ignoreMutedMedia: false,
+                disableLogs: true,
+                ignoreMutedMedia: true,
                 audioBitsPerSecond: audioBitsPerSecond,
                 videoBitsPerSecond: videoBitsPerSecond,
             };
@@ -85,37 +79,39 @@ function startScreenRecording(tabId) {
                     options.mimeType = 'video/webm; codecs="h264, opus"';
                     break;
                 default:
-                    console.log("Unknown video codec");
+                    console.log('Unknown video codec');
                     return;
             }
 
-            var mediaRecorder = new MediaRecorder(recStream, options);
+            var mediaRecorder = new MediaRecorder(stream, options);
             var seqID = 0;
             mediaRecorder.ondataavailable = (event) => {
                 if (event.data.size > 0) {
                     seqID++;
                     console.log(`Sending chunk ${seqID} to API.`);
-                    console.log(mediaRecorder.state);
-                    var xhr = new XMLHttpRequest();
-                    var url = apiURL;
+                    let xhr = new XMLHttpRequest();
+                    let url = apiURL;
                     if (mediaRecorder.state === 'inactive') {
                         url += '?end'
                     }
                     xhr.open('POST', url, true);
+                    xhr.timeout = 4500;
                     xhr.setRequestHeader('Content-Type', "video/webm");
                     xhr.setRequestHeader('X-ID', "test.webm");
                     xhr.setRequestHeader('X-SeqID', seqID);
-                    xhr.send(event.data);
-                    xhr.onreadystatechange = () => {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
+                    xhr.onerror = () => {
+                        console.log(`Error while sending chunk ${seqID} to API.`);
+                    };
+                    xhr.onload = () => {
+                        switch (xhr.status) {
+                            case 200:
                                 console.log(`Succesfuly send chunk ${seqID} to API.`);
-                                return
-                            }
-                            console.log(`Error while sending chunk ${seqID} to API.`);
-                            console.log(xhr);
+                                break;
+                            default:
+                                console.log(`Recieved enexpected http response ${xht.status} when sending chunk ${seqID} to API.`); 
                         }
                     }
+                    xhr.send(event.data);
                 }
             };
             mediaRecorder.onerror = (event) => {
