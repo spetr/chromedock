@@ -129,7 +129,7 @@ function startScreenRecording(tabId) {
             mediaRecorder.start(5000);
             isRecording = true;
 
-            chrome.tabs.create({active: true, index:0, url: "about:blank"})
+            chrome.tabs.create({active: true, index:0, url: "about:blank"});
         });
     });
 };
