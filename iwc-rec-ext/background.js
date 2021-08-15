@@ -34,12 +34,15 @@ function startScreenRecording(tabId) {
         muted: true,
         active: true
     }, () => {
-        var constraints = {
+        const constraints = {
             audio: true,
             video: true,
             audioConstraints: {
                 mandatory: {
-                    echoCancellation: false
+                    echoCancellation: false,
+                    googAutoGainControl: false,
+                    googNoiseSuppression: false,
+                    googHighpassFilter: false
                 }
             },
             videoConstraints: {
@@ -49,6 +52,7 @@ function startScreenRecording(tabId) {
                     minHeight: 9,
                     maxWidth: 1920,
                     maxHeight: 1080,
+                    minFrameRate: 15,
                     maxFrameRate: 15
                 }
             }
@@ -67,6 +71,7 @@ function startScreenRecording(tabId) {
                 ignoreMutedMedia: true,
                 audioBitsPerSecond: audioBitsPerSecond,
                 videoBitsPerSecond: videoBitsPerSecond,
+                audioBitrateMode: 'variable'
             };
             switch (videoCodec) {
                 case 'VP8':
