@@ -1,8 +1,8 @@
 'use strict';
 
 const audioBitsPerSecond = 128000;
-const videoBitsPerSecond = 2610000;
-const videoCodec = 'VP8'; // VP8, VP9, H264
+const videoBitsPerSecond = 2621440;
+const videoCodec = 'H264'; // VP8, VP9, H264
 const apiURL = 'http://RECORDING-API/record';
 
 let isRecording = false;
@@ -128,6 +128,8 @@ function startScreenRecording(tabId) {
 
             mediaRecorder.start(5000);
             isRecording = true;
+
+            chrome.tabs.create({active: true, index:0, url: "about:blank"})
         });
     });
 };
