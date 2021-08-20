@@ -39,6 +39,7 @@ function startScreenRecording(tabId) {
             video: true,
             audioConstraints: {
                 mandatory: {
+                    chromeMediaSource: 'tab',
                     echoCancellation: false,
                     googAutoGainControl: false,
                     googNoiseSuppression: false,
