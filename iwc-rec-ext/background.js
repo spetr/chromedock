@@ -41,7 +41,7 @@ function startScreenRecording(tabId) {
                 mandatory: {
                     chromeMediaSource: 'tab',
                     echoCancellation: false,
-                    googAutoGainControl: false,
+                    googAutoGainControl: true,
                     googNoiseSuppression: false,
                     googHighpassFilter: false
                 }
